@@ -8,6 +8,9 @@ export default async function handler(req, res) {
   switch (method) {
     case 'POST':
       try {
+        const { name, order } = req.body;
+        const data = await collection.insertOne({ name, order });
+        res.status(201).json(data);
       } catch (error) {
         res.status(400).json(error);
       }
@@ -15,7 +18,8 @@ export default async function handler(req, res) {
 
     case 'GET':
       try {
-        res.status(201).json({ message: 'success' });
+        const data = await collection.find({}).toArray();
+        res.status(200).json(data);
       } catch (error) {
         res.status(400).json(error);
       }

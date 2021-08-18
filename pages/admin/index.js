@@ -1,14 +1,12 @@
 import Layout from '../../components/common/layout';
-import Button from '../../components/common/button';
-import data from '../../data/data.json';
-import { useEffect, useState } from 'react';
 import EditableMaterialsTable from '../../components/admin/editableMaterialsTable';
+import { connectToDatabase } from '../../lib/mongodb';
 
-const Admin = ({ data }) => {
+const Admin = ({ categories, materials }) => {
   return (
     <Layout className="container">
       <h1>Admin</h1>
-      <EditableMaterialsTable data={data} />
+      <EditableMaterialsTable categories={categories} materials={materials} />
     </Layout>
   );
 };
@@ -16,10 +14,15 @@ const Admin = ({ data }) => {
 export default Admin;
 
 export async function getServerSideProps(context) {
-  // const { client } = await connectToDatabase();
+  const { db } = await connectToDatabase();
+  const collection = await db.collection('categories');
+  const categories = await collection.find({}).toArray();
+
+  categories.forEach((cat) => (cat._id = String(cat._id)));
+  console.log(categories);
   return {
     props: {
-      data,
+      categories,
     },
   };
 }
