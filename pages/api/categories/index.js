@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   const { method } = req;
   const { db } = await connectToDatabase();
   const collection = await db.collection('categories');
-
+  console.log('here');
   switch (method) {
     case 'POST':
       try {
@@ -25,8 +25,10 @@ export default async function handler(req, res) {
       }
       break;
 
-    case 'UPDATE':
+    case 'PUT':
       try {
+        console.log(method, req.body);
+        res.status(200).json({ data: 'success' });
       } catch (error) {
         res.status(400).json(error);
       }
@@ -38,5 +40,7 @@ export default async function handler(req, res) {
         res.status(400).json(error);
       }
       break;
+    default:
+      console.log(method, req.body);
   }
 }

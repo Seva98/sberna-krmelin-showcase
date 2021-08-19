@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import NewCategory from './newCategory';
 
-const EditableMaterialsTable = ({ categories, materials }) => {
+import EditableMaterialsTableHeader from './editableMaterialsTableHeader';
+import axios from 'axios';
+
+const EditableMaterialsTable = ({ categories, materials, editMode }) => {
   const [categoriesCopy, setCategoriesCopy] = useState(categories);
   const [newMaterial, setNewMaterial] = useState(0);
 
@@ -22,13 +25,51 @@ const EditableMaterialsTable = ({ categories, materials }) => {
     setCategoriesCopy([...categoriesCopy, data]);
   };
 
+  const handleNewOrder = async (oldOrder, direction, full) => {
+    let newOrder = 0;
+    if (direction === 'up') {
+      const minOrder = 0;
+      if (full) {
+        newOrder = minOrder;
+      } else {
+        newOrder = oldOrder - 1 >= minOrder ? oldOrder - 1 : minOrder;
+      }
+    } else {
+      const maxOrder = categories.length - 1;
+      if (full) {
+        newOrder = maxOrder;
+      } else {
+        newOrder = oldOrder + 1 <= maxOrder ? oldOrder + 1 : maxOrder;
+      }
+    }
+    const newCategories = [...categoriesCopy];
+    const temp = newCategories[oldOrder];
+    newCategories[oldOrder].order = newOrder;
+    newCategories[oldOrder] = newCategories[newOrder];
+    newCategories[newOrder].order = oldOrder;
+    newCategories[newOrder] = temp;
+
+    setCategoriesCopy(newCategories);
+    await axios.all([
+      await axios.put('/api/categories', { name: newCategories[oldOrder].name, order: newCategories[oldOrder].order }),
+      await axios.put('/api/categories', { name: newCategories[newOrder].name, order: newCategories[newOrder].order }),
+    ]);
+  };
+
   return (
     <>
       <div className="btn btn-primary float-end">Uložit nové ceny</div>
       {categoriesCopy &&
-        categoriesCopy.map((category) => (
-          <div key={'cat' + category.order} className="my-2">
-            <h2>{category.name}</h2>
+        categoriesCopy.map(({ order: catOrder, name: catName, id: catId }) => (
+          <div key={'cat' + catOrder} className="my-2">
+            <EditableMaterialsTableHeader
+              name={catName}
+              editMode={editMode}
+              onDoubleDown={() => handleNewOrder(catOrder, 'down', true)}
+              onDown={() => handleNewOrder(catOrder, 'down')}
+              onUp={() => handleNewOrder(catOrder, 'up')}
+              onDoubleUp={() => handleNewOrder(catOrder, 'up', true)}
+            />
             <table className="table">
               <thead>
                 <tr>
@@ -42,7 +83,7 @@ const EditableMaterialsTable = ({ categories, materials }) => {
               <tbody>
                 {materials &&
                   materials
-                    .filter((m) => m.category === category.id)
+                    .filter((m) => m.category === catId)
                     .map((m) => (
                       <tr key={m.id}>
                         <td>{m.name}</td>
@@ -54,7 +95,7 @@ const EditableMaterialsTable = ({ categories, materials }) => {
                         </td>
                       </tr>
                     ))}
-                {newMaterial === category.id ? (
+                {newMaterial === catId ? (
                   <tr>
                     <td>
                       <input value={''} className="w-100 form-control" onChange={handleChange} />
@@ -74,7 +115,7 @@ const EditableMaterialsTable = ({ categories, materials }) => {
                 ) : (
                   <tr>
                     <td colSpan="5">
-                      <div className="btn btn-primary w-100" onClick={() => setNewMaterial(category.id)}>
+                      <div className="btn btn-primary w-100" onClick={() => setNewMaterial(catId)}>
                         Přidat materiál
                       </div>
                     </td>
