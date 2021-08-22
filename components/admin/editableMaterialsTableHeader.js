@@ -4,7 +4,7 @@ import DoubleUpIcon from '../icons/doubleUpIcon';
 import DownIcon from '../icons/downIcon';
 import UpIcon from '../icons/upIcon';
 
-const EditableMaterialsTableHeader = ({ name, editMode, onDoubleDown, onDown, onUp, onDoubleUp }) => {
+const EditableMaterialsTableHeader = ({ name, id, editMode, loading, onDoubleDown, onDown, onUp, onDoubleUp, onDelete, onTextChange, onTextChanged }) => {
   return (
     <div className="h4">
       {editMode ? (
@@ -13,8 +13,8 @@ const EditableMaterialsTableHeader = ({ name, editMode, onDoubleDown, onDown, on
           <DownIcon onClick={onDown} className="mx-2" />
           <UpIcon onClick={onUp} className="mx-2" />
           <DoubleUpIcon onClick={onDoubleUp} />
-          <input type="text" value={name} className="mx-2" />
-          <ThrashIcon />
+          <input type="text" value={name} className="mx-2" disabled={loading} name={id} onChange={onTextChange} onBlur={onTextChanged} />
+          <ThrashIcon onClick={onDelete} />
         </>
       ) : (
         <div>{name}</div>
