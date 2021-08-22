@@ -6,10 +6,6 @@ const NewCategory = ({ categories, onCategoryAdded }) => {
   const [newCategory, setNewCategory] = useState('');
 
   const saveNewCategory = () => {
-    if (!newCategory) {
-      alert('Missing category name');
-      return;
-    }
     try {
       const data = { name: newCategory, order: categories ? categories.length : 0 };
       axios.post('/api/categories', data);
@@ -30,9 +26,9 @@ const NewCategory = ({ categories, onCategoryAdded }) => {
             <input placeholder="Kategorie" value={newCategory} className="w-100 form-control" onChange={({ target: { value } }) => setNewCategory(value)} />
           </div>
           <div className="col">
-            <div className="btn btn-primary w-100" onClick={() => saveNewCategory()}>
+            <button className="btn btn-primary w-100" onClick={() => saveNewCategory()} disabled={!newCategory}>
               Uložit kategorii
-            </div>
+            </button>
           </div>
         </div>
       ) : (

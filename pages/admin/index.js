@@ -23,14 +23,15 @@ export default Admin;
 
 export async function getServerSideProps(context) {
   const { db } = await connectToDatabase();
-  const collection = await db.collection('categories');
-  const categories = await collection.find({}).toArray();
+  const catCollection = await db.collection('categories');
+  const categories = await catCollection.find({}).toArray();
+  const matCollection = await db.collection('materials');
+  const materials = await matCollection.find({}).toArray();
 
-  categories.forEach((cat) => (cat._id = String(cat._id)));
-  console.log(categories);
   return {
     props: {
-      categories,
+      categories: JSON.parse(JSON.stringify(categories)),
+      materials: JSON.parse(JSON.stringify(materials)),
     },
   };
 }

@@ -4,12 +4,12 @@ import { connectToDatabase } from '../../../lib/mongodb';
 export default async function handler(req, res) {
   const { method } = req;
   const { db } = await connectToDatabase();
-  const categories = await db.collection('categories');
+  const materials = await db.collection('materials');
 
   switch (method) {
     case 'GET':
       try {
-        const response = await categories.find({}).toArray();
+        const response = await materials.find({}).toArray();
         res.status(200).json(response);
       } catch (error) {
         res.status(400).json(error);
@@ -18,8 +18,8 @@ export default async function handler(req, res) {
 
     case 'POST':
       try {
-        const { name, order } = req.body;
-        const response = await categories.insertOne({ name, order });
+        const { data } = req.body;
+        const response = await materials.insertOne(data);
         res.status(201).json(response);
       } catch (error) {
         res.status(400).json(error);
@@ -31,13 +31,21 @@ export default async function handler(req, res) {
         const { data, type } = req.body;
         let action;
         switch (type) {
-          case 'ORDER':
-            action = data.map(({ _id, order }) => ({
-              updateOne: {
-                filter: { _id: ObjectID(_id) },
-                update: { $set: { order } },
+          case 'NEW_PRICE':
+            const { _id, newPrice } = data;
+            const response = await materials.updateOne(
+              { _id: ObjectID(_id) },
+              {
+                $push: {
+                  prices: {
+                    timestamp: new Date(),
+                    price: newPrice,
+                  },
+                },
               },
-            }));
+            );
+            res.status(200).json({ response });
+            return;
             break;
           case 'NAME':
             action = data.map(({ _id, name }) => ({
@@ -49,7 +57,7 @@ export default async function handler(req, res) {
             break;
         }
 
-        const response = await categories.bulkWrite(action);
+        const response = await materials.bulkWrite(action);
         res.status(200).json({ response });
       } catch (error) {
         res.status(400).json(error);
@@ -60,7 +68,7 @@ export default async function handler(req, res) {
       try {
         const { _id } = req.body;
         // TODO delete from materials DB
-        const response = await categories.deleteOne({ _id: ObjectID(_id) });
+        const response = await materials.deleteOne({ _id: ObjectID(_id) });
         res.status(200).json({ response });
       } catch (error) {
         res.status(400).json(error);

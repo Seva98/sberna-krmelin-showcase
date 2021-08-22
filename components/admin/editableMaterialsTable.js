@@ -4,24 +4,23 @@ import NewCategory from './newCategory';
 import EditableMaterialsTableHeader from './editableMaterialsTableHeader';
 import axios from 'axios';
 import Loader from '../common/loader';
+import NewMaterial from './newMaterial';
 
 const EditableMaterialsTable = ({ categories, materials, editMode }) => {
   const [loading, setLoading] = useState(false);
+
+  const getChange = ({ prices }) => {
+    if (prices.length <= 1) return '-';
+
+    const prevPrice = Number(prices[prices.length - 2].price);
+    const newPrice = Number(prices[prices.length - 1].price);
+    console.log(prevPrice, newPrice, 100 * Math.abs((prevPrice - newPrice) / ((prevPrice + newPrice) / 2)));
+
+    return ((100 * (newPrice - prevPrice)) / prevPrice).toFixed(2);
+  };
+
+  // CATEGORY
   const [categoriesCopy, setCategoriesCopy] = useState(categories.sort((a, b) => a.order - b.order));
-  const [newMaterial, setNewMaterial] = useState(0);
-
-  const handleChange = (e) => {
-    const { value, name } = e.target;
-    console.log(value, name);
-    // const newMaterials = [...materials];
-    // const idx = materials.findIndex((m) => `${m.id}` === name);
-    // newMaterials[idx].price = value;
-    // setMaterials(newMaterials);
-  };
-
-  const getChange = (material) => {
-    return Number(material.price / 100).toFixed(2);
-  };
 
   const handleCategoryAdded = (data) => {
     setCategoriesCopy([...categoriesCopy, data]);
@@ -113,13 +112,39 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
     setLoading(false);
   };
 
+  // MATERIAL
+
+  const [materialsCopy, setMaterialsCopy] = useState(materials.sort((a, b) => a.order - b.order));
+  const [newMaterialCatId, setNewMaterialCatId] = useState(0);
+
+  const handleNewMaterial = async (data) => {
+    setMaterialsCopy([...materialsCopy, data]);
+    setNewMaterialCatId(0);
+  };
+
+  const handleNewPrice = async (e) => {
+    const { value, name } = e.target;
+    if (!value) return;
+    if (isNaN(value)) {
+      alert('Zadaná hodnota není číslo, použij tečku místo čárky');
+      return;
+    }
+    setLoading(true);
+    try {
+      await axios.put('/api/materials', { data: { _id: name, newPrice: value }, type: 'NEW_PRICE' });
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   return (
     <>
       <Loader loading={loading} />
       <div className="btn btn-primary float-end">Uložit nové ceny</div>
       {categoriesCopy &&
         categoriesCopy.map(({ order: catOrder, name: catName, _id: catId }) => (
-          <div key={'cat' + catOrder} className="my-2">
+          <div key={catId + catName} className="my-2">
             <EditableMaterialsTableHeader
               id={catId}
               name={catName}
@@ -144,41 +169,26 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
                 </tr>
               </thead>
               <tbody>
-                {materials &&
-                  materials
-                    .filter((m) => m.category === catId)
+                {materialsCopy &&
+                  materialsCopy
+                    .filter(({ category }) => category === catId)
                     .map((m) => (
-                      <tr key={m.id}>
+                      <tr key={m._id}>
                         <td>{m.name}</td>
-                        <td>{m.name + ' popis'}</td>
-                        <td>{m.price + ' Kč'}</td>
+                        <td>{m.description}</td>
+                        <td>{`${m.prices[m.prices.length - 1].price} ${m.unit}`}</td>
                         <td className={getChange(m) > 0 ? 'text-success' : 'text-danger'}>{getChange(m)} %</td>
                         <td>
-                          <input value={m.price} className="w-100 form-control" name={m.id} onChange={handleChange} />
+                          <input value={m.price} className="w-100 form-control" name={m._id} onBlur={handleNewPrice} disabled={loading} />
                         </td>
                       </tr>
                     ))}
-                {newMaterial === catId ? (
-                  <tr>
-                    <td>
-                      <input value={''} className="w-100 form-control" onChange={handleChange} />
-                    </td>
-                    <td>
-                      <input value={''} className="w-100 form-control" onChange={handleChange} />
-                    </td>
-                    <td>
-                      <input value={''} className="w-100 form-control" onChange={handleChange} />
-                    </td>
-                    <td colSpan={2}>
-                      <div className="btn btn-primary w-100" onClick={() => setNewMaterial(0)}>
-                        Uložit materiál
-                      </div>
-                    </td>
-                  </tr>
+                {newMaterialCatId === catId ? (
+                  <NewMaterial materials={materialsCopy} category={newMaterialCatId} onSave={handleNewMaterial} />
                 ) : (
                   <tr>
                     <td colSpan="5">
-                      <div className="btn btn-primary w-100" onClick={() => setNewMaterial(catId)}>
+                      <div className="btn btn-primary w-100" onClick={() => setNewMaterialCatId(catId)}>
                         Přidat materiál
                       </div>
                     </td>
