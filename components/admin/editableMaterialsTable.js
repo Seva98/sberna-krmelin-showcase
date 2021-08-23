@@ -1,23 +1,17 @@
 import { useState, useEffect } from 'react';
 import NewCategory from './newCategory';
 
-import EditableMaterialsTableHeader from './editableMaterialsTableHeader';
+import EditableCategoryTableHeader from './editableCategoryTableHeader';
 import axios from 'axios';
 import Loader from '../common/loader';
 import NewMaterial from './newMaterial';
+import NewMaterialButton from './newMaterialButton';
+import MaterialsTableHeader from './materialsTableHeader';
+import ReadableMaterialTableRow from './readableMaterialTableRow';
+import EditableMaterialTableRow from './editableMaterialTableRow';
 
 const EditableMaterialsTable = ({ categories, materials, editMode }) => {
   const [loading, setLoading] = useState(false);
-
-  const getChange = ({ prices }) => {
-    if (prices.length <= 1) return '-';
-
-    const prevPrice = Number(prices[prices.length - 2].price);
-    const newPrice = Number(prices[prices.length - 1].price);
-    console.log(prevPrice, newPrice, 100 * Math.abs((prevPrice - newPrice) / ((prevPrice + newPrice) / 2)));
-
-    return ((100 * (newPrice - prevPrice)) / prevPrice).toFixed(2);
-  };
 
   // CATEGORY
   const [categoriesCopy, setCategoriesCopy] = useState(categories.sort((a, b) => a.order - b.order));
@@ -26,7 +20,7 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
     setCategoriesCopy([...categoriesCopy, data]);
   };
 
-  const handleNewOrder = async (oldOrder, direction, full) => {
+  const handleNewCategoryOrder = async (oldOrder, direction, full) => {
     if (loading) return;
     let newOrder = 0;
     if (direction === 'up') {
@@ -37,7 +31,7 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
         newOrder = oldOrder - 1 >= minOrder ? oldOrder - 1 : minOrder;
       }
     } else {
-      const maxOrder = categories.length - 1;
+      const maxOrder = categoriesCopy.length - 1;
       if (full) {
         newOrder = maxOrder;
       } else {
@@ -74,7 +68,7 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
     setLoading(false);
   };
 
-  const handleHeaderTextChange = async (e) => {
+  const handleCategoryTextChange = async (e) => {
     const { value, name } = e.target;
     const newCategories = [...categoriesCopy].map((c) => {
       if (c._id === name) c.name = value;
@@ -83,7 +77,7 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
     setCategoriesCopy(newCategories);
   };
 
-  const handleHeaderTextChanged = async (e) => {
+  const handleCategoryTextChanged = async (e) => {
     const { value, name } = e.target;
     setLoading(true);
     try {
@@ -99,7 +93,6 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
     setLoading(true);
     if (confirm(`Hrebo? Opravdu chceš smazat kategorii ${catName}?`)) {
       try {
-        console.log(catName, catId);
         await axios.delete(`/api/categories`, { data: { _id: catId } });
         const filteredArr = [...categoriesCopy].filter((c) => c._id !== catId);
         const orderedArr = filteredArr.map((item, i) => ({ ...item, order: i }));
@@ -131,9 +124,134 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
     }
     setLoading(true);
     try {
-      await axios.put('/api/materials', { data: { _id: name, newPrice: value }, type: 'NEW_PRICE' });
+      await axios.put('/api/materials', { data: { _id: name, newPrice: value }, type: 'new_price' });
     } catch (error) {
       console.log(error);
+    }
+    const newMaterials = [...materialsCopy].map((m) => {
+      if (m._id === name) m.prices.push({ timestamp: String(new Date()), price: value });
+      return m;
+    });
+    setMaterialsCopy(newMaterials);
+    e.target.value = '';
+    setLoading(false);
+  };
+
+  const handleNewMaterialOrder = async (category, oldOrder, direction, full) => {
+    if (loading) return;
+    let newOrder = 0;
+    if (direction === 'up') {
+      const minOrder = 0;
+      if (full) {
+        newOrder = minOrder;
+      } else {
+        newOrder = oldOrder - 1 >= minOrder ? oldOrder - 1 : minOrder;
+      }
+    } else {
+      const maxOrder = materialsCopy.filter((m) => m.category === category).length - 1;
+      if (full) {
+        newOrder = maxOrder;
+      } else {
+        newOrder = oldOrder + 1 <= maxOrder ? oldOrder + 1 : maxOrder;
+      }
+    }
+    setLoading(true);
+    try {
+      const newMaterials = [...materialsCopy].filter((m) => m.category === category).sort((a, b) => a.order - b.order);
+      if (full) {
+        const filteredArr = newMaterials.filter((m) => m.order !== oldOrder);
+        const itemToMove = newMaterials.find((m) => m.order === oldOrder);
+        if (direction === 'up') {
+          const orderedArr = [{ ...itemToMove }, ...filteredArr].map((item, i) => ({ ...item, order: i, value: i }));
+          console.log(orderedArr);
+          await axios.put('/api/materials', { data: orderedArr, type: 'order' });
+          const newMaterialsCopy = [...materialsCopy].map((m) => {
+            orderedArr.forEach((newM) => {
+              if (newM._id === m._id) m.order = newM.order;
+            });
+            return m;
+          });
+          console.log(newMaterialsCopy);
+          setMaterialsCopy(newMaterialsCopy);
+        } else {
+          const orderedArr = [...filteredArr, { ...itemToMove }].map((item, i) => ({ ...item, order: i, value: i }));
+          await axios.put('/api/materials', { data: orderedArr, type: 'order' });
+          const newMaterialsCopy = [...materialsCopy].map((m) => {
+            orderedArr.forEach((newM) => {
+              if (newM._id === m._id) m.order = newM.order;
+            });
+            return m;
+          });
+          setMaterialsCopy(newMaterialsCopy);
+        }
+      } else {
+        const temp = newMaterials[oldOrder];
+        newMaterials[oldOrder].order = newOrder;
+        newMaterials[oldOrder] = newMaterials[newOrder];
+        newMaterials[newOrder].order = oldOrder;
+        newMaterials[newOrder] = temp;
+        await axios.put('/api/materials', {
+          data: [
+            { ...newMaterials[oldOrder], value: newMaterials[oldOrder].order },
+            { ...newMaterials[newOrder], value: newMaterials[newOrder].order },
+          ],
+          type: 'order',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
+  const handleMaterialTextChange = async (value, _id, type) => {
+    const newMaterials = [...materialsCopy].map((m) => {
+      if (m._id === _id) {
+        if (type === 'price') {
+          if (isNaN(value)) return m;
+          m.prices[m.prices.length - 1].price = value;
+        } else {
+          m[type] = value;
+        }
+      }
+      return m;
+    });
+    setMaterialsCopy(newMaterials);
+  };
+
+  const handleMaterialTextChanged = async (value, _id, type, timestamp) => {
+    console.log(value, _id, type);
+    if (type === 'price' && (isNaN(value) || !value)) return;
+    setLoading(true);
+    try {
+      await axios.put('/api/materials', { data: [{ _id, value, timestamp }], type });
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
+  const handleMaterialDelete = async (name, _id, category) => {
+    if (loading) return;
+    setLoading(true);
+    if (confirm(`Hrebo? Opravdu chceš smazat materiál ${name}?`)) {
+      try {
+        await axios.delete(`/api/materials`, { data: { _id } });
+        const filteredArr = [...materialsCopy].filter((m) => m._id !== _id && m.category === category);
+        const orderedArr = filteredArr.map((item, i) => ({ ...item, order: i, value: i }));
+        await axios.put('/api/materials', { data: orderedArr, type: 'order' });
+        const newMaterialsCopy = [...materialsCopy]
+          .filter((m) => m._id !== _id)
+          .map((m) => {
+            orderedArr.forEach((newM) => {
+              if (newM._id === m._id) m.order = newM.order;
+            });
+            return m;
+          });
+        setMaterialsCopy(newMaterialsCopy);
+      } catch (error) {
+        console.log(error);
+      }
     }
     setLoading(false);
   };
@@ -141,58 +259,51 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
   return (
     <>
       <Loader loading={loading} />
-      <div className="btn btn-primary float-end">Uložit nové ceny</div>
       {categoriesCopy &&
         categoriesCopy.map(({ order: catOrder, name: catName, _id: catId }) => (
           <div key={catId + catName} className="my-2">
-            <EditableMaterialsTableHeader
+            <EditableCategoryTableHeader
               id={catId}
               name={catName}
               editMode={editMode}
               loading={loading}
-              onDoubleDown={() => handleNewOrder(catOrder, 'down', true)}
-              onDown={() => handleNewOrder(catOrder, 'down')}
-              onUp={() => handleNewOrder(catOrder, 'up')}
-              onDoubleUp={() => handleNewOrder(catOrder, 'up', true)}
-              onTextChange={handleHeaderTextChange}
-              onTextChanged={handleHeaderTextChanged}
+              onDoubleDown={() => handleNewCategoryOrder(catOrder, 'down', true)}
+              onDown={() => handleNewCategoryOrder(catOrder, 'down')}
+              onUp={() => handleNewCategoryOrder(catOrder, 'up')}
+              onDoubleUp={() => handleNewCategoryOrder(catOrder, 'up', true)}
+              onTextChange={handleCategoryTextChange}
+              onTextChanged={handleCategoryTextChanged}
               onDelete={() => handleCategoryDelete(catName, catId)}
             />
             <table className="table">
-              <thead>
-                <tr>
-                  <th>Název</th>
-                  <th>Popis</th>
-                  <th>Cena</th>
-                  <th>Rozdíl</th>
-                  <th>Nová cena</th>
-                </tr>
-              </thead>
+              <MaterialsTableHeader editMode={editMode} />
               <tbody>
                 {materialsCopy &&
                   materialsCopy
                     .filter(({ category }) => category === catId)
-                    .map((m) => (
-                      <tr key={m._id}>
-                        <td>{m.name}</td>
-                        <td>{m.description}</td>
-                        <td>{`${m.prices[m.prices.length - 1].price} ${m.unit}`}</td>
-                        <td className={getChange(m) > 0 ? 'text-success' : 'text-danger'}>{getChange(m)} %</td>
-                        <td>
-                          <input value={m.price} className="w-100 form-control" name={m._id} onBlur={handleNewPrice} disabled={loading} />
-                        </td>
-                      </tr>
-                    ))}
+                    .sort((a, b) => a.order - b.order)
+                    .map((material) =>
+                      editMode ? (
+                        <EditableMaterialTableRow
+                          key={material._id + material.name}
+                          material={material}
+                          onDoubleDown={() => handleNewMaterialOrder(material.category, material.order, 'down', true)}
+                          onDown={() => handleNewMaterialOrder(material.category, material.order, 'down')}
+                          onUp={() => handleNewMaterialOrder(material.category, material.order, 'up')}
+                          onDoubleUp={() => handleNewMaterialOrder(material.category, material.order, 'up', true)}
+                          onTextChange={handleMaterialTextChange}
+                          onTextChanged={handleMaterialTextChanged}
+                          onDelete={() => handleMaterialDelete(material.name, material._id, material.category)}
+                          loading={loading}
+                        />
+                      ) : (
+                        <ReadableMaterialTableRow key={material._id} material={material} onNewPrice={handleNewPrice} loading={loading} />
+                      ),
+                    )}
                 {newMaterialCatId === catId ? (
-                  <NewMaterial materials={materialsCopy} category={newMaterialCatId} onSave={handleNewMaterial} />
+                  <NewMaterial materials={materialsCopy} category={newMaterialCatId} onSave={handleNewMaterial} onCancel={() => setNewMaterialCatId(0)} />
                 ) : (
-                  <tr>
-                    <td colSpan="5">
-                      <div className="btn btn-primary w-100" onClick={() => setNewMaterialCatId(catId)}>
-                        Přidat materiál
-                      </div>
-                    </td>
-                  </tr>
+                  <NewMaterialButton onClick={() => setNewMaterialCatId(catId)} />
                 )}
               </tbody>
             </table>

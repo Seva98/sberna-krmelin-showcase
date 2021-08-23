@@ -30,33 +30,47 @@ export default async function handler(req, res) {
       try {
         const { data, type } = req.body;
         let action;
-        switch (type) {
-          case 'NEW_PRICE':
-            const { _id, newPrice } = data;
-            const response = await materials.updateOne(
-              { _id: ObjectID(_id) },
-              {
-                $push: {
-                  prices: {
-                    timestamp: new Date(),
-                    price: newPrice,
-                  },
+        if (type === 'new_price') {
+          const { _id, newPrice } = data;
+          const response = await materials.updateOne(
+            { _id: ObjectID(_id) },
+            {
+              $push: {
+                prices: {
+                  timestamp: new Date(),
+                  price: newPrice,
                 },
               },
-            );
-            res.status(200).json({ response });
-            return;
-            break;
-          case 'NAME':
-            action = data.map(({ _id, name }) => ({
-              updateOne: {
-                filter: { _id: ObjectID(_id) },
-                update: { $set: { name } },
+            },
+          );
+          await res.status(200).json({ response });
+          return;
+        } else if (type === 'price') {
+          action = data.map(({ _id, value, timestamp }) => ({
+            updateOne: {
+              filter: {
+                _id: ObjectID(_id),
+                'prices.timestamp': new Date(timestamp),
               },
-            }));
-            break;
+              update: {
+                $set: {
+                  'prices.$.price': value,
+                },
+              },
+            },
+          }));
+        } else {
+          action = data.map(({ _id, value }) => ({
+            updateOne: {
+              filter: { _id: ObjectID(_id) },
+              update: {
+                $set: {
+                  [`${type}`]: value,
+                },
+              },
+            },
+          }));
         }
-
         const response = await materials.bulkWrite(action);
         res.status(200).json({ response });
       } catch (error) {
@@ -67,7 +81,7 @@ export default async function handler(req, res) {
     case 'DELETE':
       try {
         const { _id } = req.body;
-        // TODO delete from materials DB
+        console.log(_id);
         const response = await materials.deleteOne({ _id: ObjectID(_id) });
         res.status(200).json({ response });
       } catch (error) {

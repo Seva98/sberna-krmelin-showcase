@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
+import CrossIcon from '../icons/crossIcon';
 
 const NewCategory = ({ categories, onCategoryAdded }) => {
   const [addingCategory, setAddingCategory] = useState(false);
@@ -29,6 +30,9 @@ const NewCategory = ({ categories, onCategoryAdded }) => {
             <button className="btn btn-primary w-100" onClick={() => saveNewCategory()} disabled={!newCategory}>
               Uložit kategorii
             </button>
+          </div>
+          <div className="col-md-auto" style={{ marginBlock: 'auto' }}>
+            <CrossIcon onClick={() => setAddingCategory(false)} />
           </div>
         </div>
       ) : (
