@@ -3,6 +3,7 @@ import { connectToDatabase } from '../lib/mongodb';
 import Banner from '../components/homepage/bannerTop';
 import bannerTop from '../assets/images/banner-top.png';
 import InfoTop from '../components/homepage/infoTop';
+import InfoBottom from '../components/homepage/infoBottom';
 import Rema from '../components/homepage/rema';
 import ReviewsCarousel from '../components/homepage/reviewsCarousel';
 import GoogleMap from '../components/homepage/googleMap';
@@ -29,6 +30,11 @@ export default function Home({ materials, deviceType }) {
       <section>
         <div className="theme-bg-primary py-4">
           <GoogleMap />
+        </div>
+      </section>
+      <section className=" theme-bg-secondary">
+        <div className="container py-5">
+          <InfoBottom />
         </div>
       </section>
     </Layout>

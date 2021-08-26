@@ -1,9 +1,7 @@
-import Container from './container';
-
 export default function Footer() {
   return (
     <footer>
-      <Container>
+      <div className="container text-center p-5">
         <div>Všechna práva vyhrazena © {new Date().getFullYear()} LH Store s.r.o.</div>
         <div>
           <span>Made by </span>
@@ -11,7 +9,7 @@ export default function Footer() {
             sevcik.dev
           </a>
         </div>
-      </Container>
+      </div>
     </footer>
   );
 }

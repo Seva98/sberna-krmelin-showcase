@@ -7,7 +7,7 @@ export default function Layout({ children, className }) {
     <>
       <Meta />
       <Navbar />
-      <div className={className}>
+      <div className={className} style={{ minHeight: '100vh' }}>
         <main>{children}</main>
       </div>
       <Footer />

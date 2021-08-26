@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import StarIcon from '../icons/starIcon';
-import Review1 from '../../assets/images/review-1.jpeg';
 
 const Review = ({ name, location, title, text, image }) => {
   return (
@@ -16,7 +15,7 @@ const Review = ({ name, location, title, text, image }) => {
       <div className="mb-3">{text}</div>
       <div className="row">
         <div className="col-auto">
-          <Image className="source-profile rounded-circle mr-3" src={Review1} alt="" height="96" width="96" />
+          <Image className="source-profile rounded-circle mr-3" src={image} alt="" height="96" width="96" />
         </div>
         <div className="col">
           <div className="source-info media-body pt-4">

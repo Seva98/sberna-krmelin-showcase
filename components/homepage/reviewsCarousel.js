@@ -3,7 +3,10 @@ import 'react-multi-carousel/lib/styles.css';
 import Image from 'next/image';
 import QuickContacts from './quickContacts';
 import Review from './review';
-import Review1 from '../../assets/images/review-1.jpeg';
+import Review1 from '../../assets/images/review-1.png';
+import Review2 from '../../assets/images/review-2.png';
+import Review3 from '../../assets/images/review-3.png';
+import Review4 from '../../assets/images/review-4.jpg';
 
 const ReviewsCarousel = ({ deviceType }) => {
   const responsive = {
@@ -33,32 +36,25 @@ const ReviewsCarousel = ({ deviceType }) => {
       image: Review1,
     },
     {
-      name: 'Ondřej Ševčík',
-      location: 'Petřvald',
-      title: 'Vykoupi to co nazvedám',
-      text: 'Jeden den jsem zvedal ve fitku a fakt mi to ten den sedlo. Tak jsem si naložil plnou činku a zavolal panu Hrebíkovi, že se mi to železo z té činky nechce sundávat, zda by ho neodkoupil. Pan Hrebík mi se vším milerád pomohl, činku jsem nemusel sundávat a peníze mi dal hned na ruku. 100% spokojenost!',
-      image: Review1,
+      name: 'Tonda Harmečko',
+      location: 'Ostrava',
+      title: 'Férový přístup',
+      text: 'Férová sběrna s velice ochotným personálem, chlapi byli ochotní + mají přehledný ceník',
+      image: Review2,
     },
     {
-      name: 'Ondřej Ševčík',
-      location: 'Petřvald',
-      title: 'Vykoupi to co nazvedám',
-      text: 'Jeden den jsem zvedal ve fitku a fakt mi to ten den sedlo. Tak jsem si naložil plnou činku a zavolal panu Hrebíkovi, že se mi to železo z té činky nechce sundávat, zda by ho neodkoupil. Pan Hrebík mi se vším milerád pomohl, činku jsem nemusel sundávat a peníze mi dal hned na ruku. 100% spokojenost!',
-      image: Review1,
+      name: 'Josef Zedník',
+      location: 'Brušperk',
+      title: 'Blesková rychlost ⚡',
+      text: 'Pekelně rychlí zaměstnanci, nikdy jsem nečekal. Jinam už nepojedu. 👍',
+      image: Review3,
     },
     {
-      name: 'Ondřej Ševčík',
-      location: 'Petřvald',
-      title: 'Vykoupi to co nazvedám',
-      text: 'Jeden den jsem zvedal ve fitku a fakt mi to ten den sedlo. Tak jsem si naložil plnou činku a zavolal panu Hrebíkovi, že se mi to železo z té činky nechce sundávat, zda by ho neodkoupil. Pan Hrebík mi se vším milerád pomohl, činku jsem nemusel sundávat a peníze mi dal hned na ruku. 100% spokojenost!',
-      image: Review1,
-    },
-    {
-      name: 'Ondřej Ševčík',
-      location: 'Petřvald',
-      title: 'Vykoupi to co nazvedám',
-      text: 'Jeden den jsem zvedal ve fitku a fakt mi to ten den sedlo. Tak jsem si naložil plnou činku a zavolal panu Hrebíkovi, že se mi to železo z té činky nechce sundávat, zda by ho neodkoupil. Pan Hrebík mi se vším milerád pomohl, činku jsem nemusel sundávat a peníze mi dal hned na ruku. 100% spokojenost!',
-      image: Review1,
+      name: 'Jan Pavlosek',
+      location: 'Krmelín',
+      title: '100% zdvořilost',
+      text: 'Obsluha za mě super, byly slušní, nemusel jsem se za nic stydět, přijel jsem, ukázali kde, co, jak a proč, vlastně jsem se o nic nestaral, za mě OK a určitě se tady při další příležitosti vrátím znovu.',
+      image: Review4,
     },
   ];
 
