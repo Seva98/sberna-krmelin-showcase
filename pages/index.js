@@ -3,7 +3,7 @@ import { connectToDatabase } from '../lib/mongodb';
 import Banner from '../components/homepage/bannerTop';
 import bannerTop from '../assets/images/banner-top.png';
 import InfoTop from '../components/homepage/infoTop';
-import Rema from '../components/homepage/Rema';
+import Rema from '../components/homepage/rema';
 import ReviewsCarousel from '../components/homepage/reviewsCarousel';
 import GoogleMap from '../components/homepage/googleMap';
 
