@@ -1,7 +1,12 @@
 import { ObjectID } from 'mongodb';
+import { isNotAdmin } from '../../../lib/helpers';
 import { connectToDatabase } from '../../../lib/mongodb';
 
 export default async function handler(req, res) {
+  if (await isNotAdmin(req)) {
+    res.status(401).json({ error: 'Unauthorized access' });
+    return;
+  }
   const { method } = req;
   const { db } = await connectToDatabase();
   const materials = await db.collection('materials');
@@ -59,6 +64,18 @@ export default async function handler(req, res) {
               },
             },
           }));
+        } else if (type === 'favorite') {
+          const { _id, favorite } = data;
+          const response = await materials.updateOne(
+            { _id: ObjectID(_id) },
+            {
+              $set: {
+                favorite: !favorite,
+              },
+            },
+          );
+          await res.status(200).json({ response });
+          return;
         } else {
           action = data.map(({ _id, value }) => ({
             updateOne: {
@@ -81,7 +98,6 @@ export default async function handler(req, res) {
     case 'DELETE':
       try {
         const { _id } = req.body;
-        console.log(_id);
         const response = await materials.deleteOne({ _id: ObjectID(_id) });
         res.status(200).json({ response });
       } catch (error) {

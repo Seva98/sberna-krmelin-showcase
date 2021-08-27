@@ -1,7 +1,12 @@
 import { ObjectID } from 'mongodb';
+import { isNotAdmin } from '../../../lib/helpers';
 import { connectToDatabase } from '../../../lib/mongodb';
 
 export default async function handler(req, res) {
+  if (await isNotAdmin(req)) {
+    res.status(401).json({ error: 'Unauthorized access' });
+    return;
+  }
   const { method } = req;
   const { db } = await connectToDatabase();
   const categories = await db.collection('categories');

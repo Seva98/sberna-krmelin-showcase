@@ -12,7 +12,7 @@ const NewCategory = ({ categories, onCategoryAdded }) => {
       axios.post('/api/categories', data);
       setAddingCategory(false);
       setNewCategory('');
-      console.log(categories);
+      categories;
       onCategoryAdded(data);
     } catch (error) {
       alert(error);

@@ -80,6 +80,16 @@ a:hover {
   color: #47b0df;
   border: 2px solid #47b0df;
 }
+.btn-primary {
+  background: #47b0df;
+}
+.theme-btn {
+  padding: 0.6rem 1.5rem;
+}
+.theme-btn-ghost:hover {
+  background: #47b0df !important;
+  color: white !important;
+}
 .theme-btn-on-bg {
   color: #fff;
   border-color: #fff;
@@ -88,9 +98,21 @@ a:hover {
   background: white;
   color: #47b0df;
 }
-.theme-btn {
-  padding: 0.6rem 1.5rem;
+.btn-active-table,
+.btn-inactive-table:hover {
+  color: #526b84;
+  background: white;
+  border-radius: 0;
+  border: 1px solid #526b84;
+  border-bottom: none;
 }
+.btn-inactive-table,
+.btn-active-table:hover {
+  color: white;
+  background: #526b84;
+  border-radius: 0;
+}
+
 .btn {
   font-weight: bold;
 }
@@ -137,6 +159,10 @@ a:hover {
 
 .map-frame {
   width: 100%;
-  height: 600px;
+  height: 500px;
   position: relative;
+}
+
+.nav-item.is-active > a {
+  font-weight: 900;
 }

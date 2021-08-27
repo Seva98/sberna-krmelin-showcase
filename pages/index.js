@@ -7,8 +7,12 @@ import InfoBottom from '../components/homepage/infoBottom';
 import Rema from '../components/homepage/rema';
 import ReviewsCarousel from '../components/homepage/reviewsCarousel';
 import GoogleMap from '../components/homepage/googleMap';
+import { useSession } from 'next-auth/client';
+import bcrypt from 'bcryptjs';
 
 export default function Home({ materials, deviceType }) {
+  const [session, loading] = useSession();
+
   return (
     <Layout>
       <section>

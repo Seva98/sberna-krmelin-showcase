@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 
 const GoogleMap = () => {
-  // <div style={{ position: 'relative', textAlign: 'center', height: '500px', width: '600px', maxWidth: '100%', margin: '0 auto' }}>
   return (
     <div className="text-center">
       <div className="mb-2">

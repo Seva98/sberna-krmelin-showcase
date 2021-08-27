@@ -51,7 +51,7 @@ const NewMaterial = ({ materials, category, onSave, onCancel }) => {
         <input name="unit" placeholder="Jednotka" value={unit} className="w-100 form-control" onChange={({ target: { value } }) => setUnit(value)} />
       </td>
       <td>
-        <button className="btn btn-primary w-100" onClick={() => saveNewMaterial()} disabled={!name || !description || !price}>
+        <button className="btn theme-btn-ghost w-100" onClick={() => saveNewMaterial()} disabled={!name || !description || !price}>
           Uložit materiál
         </button>
       </td>

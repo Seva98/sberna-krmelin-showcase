@@ -163,7 +163,6 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
         const itemToMove = newMaterials.find((m) => m.order === oldOrder);
         if (direction === 'up') {
           const orderedArr = [{ ...itemToMove }, ...filteredArr].map((item, i) => ({ ...item, order: i, value: i }));
-          console.log(orderedArr);
           await axios.put('/api/materials', { data: orderedArr, type: 'order' });
           const newMaterialsCopy = [...materialsCopy].map((m) => {
             orderedArr.forEach((newM) => {
@@ -171,7 +170,6 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
             });
             return m;
           });
-          console.log(newMaterialsCopy);
           setMaterialsCopy(newMaterialsCopy);
         } else {
           const orderedArr = [...filteredArr, { ...itemToMove }].map((item, i) => ({ ...item, order: i, value: i }));
@@ -219,8 +217,22 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
     setMaterialsCopy(newMaterials);
   };
 
+  const handleFavorite = async (material) => {
+    setLoading(true);
+    try {
+      await axios.put('/api/materials', { data: material, type: 'favorite' });
+      const updatedArr = [...materialsCopy].map((m) => {
+        if (m._id === material._id) m.favorite = !m.favorite;
+        return m;
+      });
+      setMaterialsCopy(updatedArr);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
+
   const handleMaterialTextChanged = async (value, _id, type, timestamp) => {
-    console.log(value, _id, type);
     if (type === 'price' && (isNaN(value) || !value)) return;
     setLoading(true);
     try {
@@ -275,7 +287,7 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
               onTextChanged={handleCategoryTextChanged}
               onDelete={() => handleCategoryDelete(catName, catId)}
             />
-            <table className="table">
+            <table className="table table-striped">
               <MaterialsTableHeader editMode={editMode} />
               <tbody>
                 {materialsCopy &&
@@ -294,6 +306,7 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
                           onTextChange={handleMaterialTextChange}
                           onTextChanged={handleMaterialTextChanged}
                           onDelete={() => handleMaterialDelete(material.name, material._id, material.category)}
+                          onFavorite={() => handleFavorite(material)}
                           loading={loading}
                         />
                       ) : (

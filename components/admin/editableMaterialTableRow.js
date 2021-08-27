@@ -1,17 +1,21 @@
+import axios from 'axios';
 import DoubleDownIcon from '../icons/doubleDownIcon';
 import DoubleUpIcon from '../icons/doubleUpIcon';
 import DownIcon from '../icons/downIcon';
+import EmptyStarIcon from '../icons/emptyStarIcon';
+import StarIcon from '../icons/starIcon';
 import ThrashIcon from '../icons/thrashIcon';
 import UpIcon from '../icons/upIcon';
 
-const EditableMaterialTableRow = ({ material, loading, onDoubleDown, onDown, onUp, onDoubleUp, onTextChange, onTextChanged, onDelete }) => {
+const EditableMaterialTableRow = ({ material, loading, onDoubleDown, onDown, onUp, onDoubleUp, onTextChange, onTextChanged, onDelete, onFavorite }) => {
   return (
     <tr>
       <td>
         <DoubleDownIcon onClick={onDoubleDown} />
         <DownIcon onClick={onDown} className="mx-2" />
         <UpIcon onClick={onUp} className="mx-2" />
-        <DoubleUpIcon onClick={onDoubleUp} />
+        <DoubleUpIcon onClick={onDoubleUp} className="mx-2" />
+        {material.favorite ? <StarIcon onClick={onFavorite} /> : <EmptyStarIcon onClick={onFavorite} />}
       </td>
       <td>
         <input

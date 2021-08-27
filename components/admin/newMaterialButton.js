@@ -1,10 +1,10 @@
 const NewMaterialButton = ({ catId, onClick }) => {
   return (
     <tr>
-      <td colSpan="5">
-        <div className="btn btn-primary w-100" onClick={onClick}>
+      <td colSpan="5" className="p-0">
+        <button className="btn btn-secondary w-100" onClick={onClick}>
           Přidat materiál
-        </div>
+        </button>
       </td>
     </tr>
   );
