@@ -5,9 +5,9 @@ import EditIcon from '../../components/icons/editIcon';
 import { useEffect, useState } from 'react';
 import CheckIcon from '../../components/icons/checkIcon';
 import { getSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
 
 const Admin = ({ email, categories, materials }) => {
+  console.log(email, categories, materials);
   useEffect(() => {
     if (!email) window.location = '/api/auth/signin';
   }, []);
@@ -30,12 +30,14 @@ export default Admin;
 export async function getServerSideProps(context) {
   const { query } = context;
   const session = await getSession(context);
+  console.log('SESSION', session);
   if (!session) return { props: {} };
   const {
     user: { email },
   } = session;
   const { role } = query;
   const { ADMIN_USER } = process.env;
+  console.log('SESSION 2', ADMIN_USER, role, user);
   if (ADMIN_USER !== email) return { props: {} };
 
   const { db } = await connectToDatabase();
