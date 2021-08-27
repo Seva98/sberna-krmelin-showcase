@@ -82,6 +82,12 @@ a:hover {
 }
 .btn-primary {
   background: #47b0df;
+  border: 1px solid #47b0df;
+}
+.btn-primary:hover {
+  background: white;
+  color: #47b0df;
+  border: 1px solid #47b0df;
 }
 .theme-btn {
   padding: 0.6rem 1.5rem;
