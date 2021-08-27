@@ -16,11 +16,12 @@ const options = {
         password: { label: 'Heslo', type: 'password', placeholder: '********' },
       },
       async authorize(credenetials) {
+        console.log('AUTHORIZING');
         const { email, password } = credenetials;
         const { db } = await connectToDatabase();
         const collection = await db.collection('users');
         const user = await collection.findOne({ email });
-
+        console.log('USER', user, bcrypt.compareSync(password, user.password));
         if (user) {
           return bcrypt.compareSync(password, user.password) ? { email: user.email, role: user.role } : null;
         } else {
@@ -41,7 +42,7 @@ const options = {
       const { db } = await connectToDatabase();
       const collection = await db.collection('users');
       const { role, _id } = await collection.findOne({ email });
-      console.log(_id);
+      console.log(_id, role);
       return {
         ...session,
         user: {
