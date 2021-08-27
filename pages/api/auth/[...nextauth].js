@@ -58,7 +58,7 @@ const options = {
 };
 
 const response = (req, res) => {
-  setNextAuthUrl(req);
+  //setNextAuthUrl(req);
   NextAuth(req, res, options);
   res.status(200);
 };
