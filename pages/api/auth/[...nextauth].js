@@ -64,8 +64,8 @@ const response = (req, res) => {
 export default response;
 
 function setNextAuthUrl(req) {
-  const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
   const host = req.headers['host'];
+  const protocol = host === 'localhost:3000' ? 'http' : 'https';
 
   if (!host) {
     throw new Error(`The request has no host header which breaks authentication and authorization.`);
