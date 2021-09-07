@@ -13,7 +13,7 @@ const Kontakty = () => {
           <h1>Kontakty</h1>
           <div className="row">
             <div className="col-12">
-              <ContactsCard image={sberna} name="Sběrna Krmelín" subtitle="Provozovna" phone="+420 YYY YYY YYY" email="info@sbernakrmelin.cz">
+              <ContactsCard image={sberna} name="LH Store s.r.o." subtitle="Provozovatel Sběrna Krmelín" phone="+420 YYY YYY YYY" email="info@sbernakrmelin.cz">
                 <div className="text-center mb-3">
                   Staroveská 567
                   <br />
