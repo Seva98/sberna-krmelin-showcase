@@ -18,7 +18,7 @@ const MaterialsTable = ({ categories, materials, activeMainCategory }) => {
           .map(({ name: catName, _id: catId }) => (
             <div key={catId + catName} className="my-2">
               <div className="h4">{catName}</div>
-              <table className="table table-striped">
+              <table className="table table-striped price-list">
                 <thead>
                   <tr>
                     <th className="col-4">Název</th>

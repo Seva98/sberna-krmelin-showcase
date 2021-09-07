@@ -287,7 +287,7 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
               onTextChanged={handleCategoryTextChanged}
               onDelete={() => handleCategoryDelete(catName, catId)}
             />
-            <table className="table table-striped">
+            <table className="table table-striped price-list">
               <MaterialsTableHeader editMode={editMode} />
               <tbody>
                 {materialsCopy &&

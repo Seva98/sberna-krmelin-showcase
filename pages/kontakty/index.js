@@ -1,11 +1,9 @@
-import Card from '../../components/common/card';
 import Layout from '../../components/common/layout';
-import BottomAbout from '../../components/homepage/bottomAbout';
-import BottomLocation from '../../components/homepage/bottomLocation';
 import GoogleMap from '../../components/homepage/googleMap';
-import PhoneIcon from '../../components/icons/phoneIcon';
-import BookIcon from '../../components/icons/bookIcon';
-import HouseIcon from '../../components/icons/houseIcon';
+import ContactsCard from '../../components/contacts/contactsCard';
+import sberna from '../../assets/images/sberna.jpeg';
+import hrebo from '../../assets/images/hrebo.png';
+import marek from '../../assets/images/marek.png';
 
 const Kontakty = () => {
   return (
@@ -14,35 +12,22 @@ const Kontakty = () => {
         <div className="container">
           <h1>Kontakty</h1>
           <div className="row">
-            <div className="col">
-              <Card icon={<PhoneIcon className="me-2 align-top" style={{ width: '24px', height: '24px' }} />} title="Menu">
-                <table className="table">
-                  <tbody>
-                    <tr>
-                      <th>Tel.</th>
-                      <td>
-                        <a href="tel:736642927">+420 736 642 927</a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Email</th>
-                      <td>
-                        <a href="mailto:info@sbernakrmelin.cz">info@sbernakrmelin.cz</a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </Card>
+            <div className="col-12">
+              <ContactsCard image={sberna} name="Sběrna Krmelín" subtitle="Provozovna" phone="+420 YYY YYY YYY" email="info@sbernakrmelin.cz">
+                <div className="text-center mb-3">
+                  Staroveská 567
+                  <br />
+                  739 24 Krmelín
+                </div>
+              </ContactsCard>
             </div>
-            <div className="col">
-              <Card icon={<BookIcon className="me-2 align-top" />} title="Firemní údaje">
-                <BottomAbout />
-              </Card>
+          </div>
+          <div className="row">
+            <div className="col-6">
+              <ContactsCard image={hrebo} name="Ing. Lukáš Hrebík" subtitle="Jednatel" phone="+420 736 642 927" email="hrebik@lhstore.cz" />
             </div>
-            <div className="col">
-              <Card icon={<HouseIcon className="me-2 align-top" />} title="Provozovny">
-                <BottomLocation />
-              </Card>
+            <div className="col-6">
+              <ContactsCard image={marek} name="Marek Elšík" subtitle="Nákupčí" phone="+420 XXX XXX XXX" email="elsik@lhstore.cz" />
             </div>
           </div>
         </div>

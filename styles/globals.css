@@ -172,3 +172,12 @@ a:hover {
 .nav-item.is-active > a {
   font-weight: 900;
 }
+
+.price-list > tbody > tr:hover {
+  background-color: #b1e6ff;
+}
+
+.table.table-contact > tbody > tr > td,
+.table.table-contact > tbody > tr > th {
+  padding: 10px;
+}
