@@ -202,21 +202,6 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
     setLoading(false);
   };
 
-  const handleMaterialTextChange = async (value, _id, type) => {
-    const newMaterials = [...materialsCopy].map((m) => {
-      if (m._id === _id) {
-        if (type === 'price') {
-          if (isNaN(value)) return m;
-          m.prices[m.prices.length - 1].price = value;
-        } else {
-          m[type] = value;
-        }
-      }
-      return m;
-    });
-    setMaterialsCopy(newMaterials);
-  };
-
   const handleFavorite = async (material) => {
     setLoading(true);
     try {
@@ -303,7 +288,6 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
                           onDown={() => handleNewMaterialOrder(material.category, material.order, 'down')}
                           onUp={() => handleNewMaterialOrder(material.category, material.order, 'up')}
                           onDoubleUp={() => handleNewMaterialOrder(material.category, material.order, 'up', true)}
-                          onTextChange={handleMaterialTextChange}
                           onTextChanged={handleMaterialTextChanged}
                           onDelete={() => handleMaterialDelete(material.name, material._id, material.category)}
                           onFavorite={() => handleFavorite(material)}

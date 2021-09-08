@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import img from '../../assets/images/review-1.png';
 
 const MaterialsTable = ({ categories, materials, activeMainCategory }) => {
   const [activeMaterial, setActiveMaterial] = useState('');

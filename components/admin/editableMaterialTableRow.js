@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useState } from 'react';
 import DoubleDownIcon from '../icons/doubleDownIcon';
 import DoubleUpIcon from '../icons/doubleUpIcon';
 import DownIcon from '../icons/downIcon';
@@ -7,7 +8,44 @@ import StarIcon from '../icons/starIcon';
 import ThrashIcon from '../icons/thrashIcon';
 import UpIcon from '../icons/upIcon';
 
-const EditableMaterialTableRow = ({ material, loading, onDoubleDown, onDown, onUp, onDoubleUp, onTextChange, onTextChanged, onDelete, onFavorite }) => {
+const EditableMaterialTableRow = ({ material, loading, onDoubleDown, onDown, onUp, onDoubleUp, onTextChanged, onDelete, onFavorite }) => {
+  const [name, setName] = useState(material.name);
+  const [description, setDescription] = useState(material.description);
+  const [price, setPrice] = useState(material.prices[material.prices.length - 1].price);
+  const [unit, setUnit] = useState(material.unit);
+  const [img, setImg] = useState(material.img);
+
+  const [materialCopy, setMaterialCopy] = useState({
+    name: material.name,
+    description: material.description,
+    price: material.prices[material.prices.length - 1].price,
+    unit: material.unit,
+    img: material.img,
+  });
+
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+      case 'description':
+        setDescription(value);
+        break;
+      case 'price': {
+        if (isNaN(value)) return;
+        setPrice(value);
+        break;
+      }
+      case 'unit':
+        setUnit(value);
+        break;
+      case 'img':
+        setImg(value);
+        break;
+    }
+  };
+
   return (
     <tr>
       <td style={{ minWidth: '175px' }}>
@@ -20,55 +58,60 @@ const EditableMaterialTableRow = ({ material, loading, onDoubleDown, onDown, onU
       <td>
         <input
           type="text"
+          name="name"
           placeholder="Název"
-          value={material.name}
+          value={name}
           className="mx-2"
           disabled={loading}
-          onChange={(e) => onTextChange(e.target.value, material._id, 'name')}
+          onChange={handleChange}
           onBlur={(e) => onTextChanged(e.target.value, material._id, 'name')}
         />
       </td>
       <td>
         <input
           type="text"
+          name="description"
           placeholder="Popis"
-          value={material.description}
+          value={description}
           className="mx-2"
           disabled={loading}
-          onChange={(e) => onTextChange(e.target.value, material._id, 'description')}
+          onChange={handleChange}
           onBlur={(e) => onTextChanged(e.target.value, material._id, 'description')}
         />
       </td>
       <td>
         <input
           type="number"
+          name="price"
           placeholder="Cena"
-          value={material.prices[material.prices.length - 1].price}
+          value={price}
           className="mx-2"
           disabled={loading}
-          onChange={(e) => onTextChange(e.target.value, material._id, 'price')}
+          onChange={handleChange}
           onBlur={(e) => onTextChanged(e.target.value, material._id, 'price', material.prices[material.prices.length - 1].timestamp)}
         />
       </td>
       <td>
         <input
           type="text"
+          name="unit"
           placeholder="Popis"
-          value={material.unit}
+          value={unit}
           className="mx-2"
           disabled={loading}
-          onChange={(e) => onTextChange(e.target.value, material._id, 'unit')}
+          onChange={handleChange}
           onBlur={(e) => onTextChanged(e.target.value, material._id, 'unit')}
         />
       </td>
       <td>
         <input
           type="text"
+          name="img"
           placeholder="URL obrázku"
-          value={material.img}
+          value={img}
           className="mx-2"
           disabled={loading}
-          onChange={(e) => onTextChange(e.target.value, material._id, 'img')}
+          onChange={handleChange}
           onBlur={(e) => onTextChanged(e.target.value, material._id, 'img')}
         />
       </td>

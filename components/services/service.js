@@ -7,7 +7,11 @@ const Service = ({ title, text, image, leftImg }) => {
         <div className="row">
           <div className="col-12 col-lg-7 align-self-center">
             <h4>{title}</h4>
-            <div className="mb-5">{text}</div>
+            <div className="mb-5" style={{ lineHeight: '1.75rem' }}>
+              {text.split(/\r?\n|\r/g).map((t) => (
+                <div key={Math.random()}>{t}</div>
+              ))}
+            </div>
           </div>
           <div className={`col-12 col-lg-5 ${leftImg && 'order-lg-first'}`}>
             <div className="shadow" style={{ fontSize: '0' }}>
