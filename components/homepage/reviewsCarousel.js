@@ -29,10 +29,10 @@ const ReviewsCarousel = ({ deviceType }) => {
 
   const reviews = [
     {
-      name: 'Ondřej Ševčík',
+      name: 'Petr Ševčík',
       location: 'Petřvald',
-      title: 'Vykoupi to co nazvedám',
-      text: 'Jeden den jsem zvedal ve fitku a fakt mi to ten den sedlo. Tak jsem si naložil plnou činku a zavolal panu Hrebíkovi, že se mi to železo z té činky nechce sundávat, zda by ho neodkoupil. Pan Hrebík mi se vším milerád pomohl, činku jsem nemusel sundávat a peníze mi dal hned na ruku. 100% spokojenost!',
+      title: 'Profi obsluha',
+      text: 'Přijel jsem s nákladem, kluci ze sběrny vše vysvětlili a pomohli mi. Určitě se zde ještě vrátím!',
       image: Review1,
     },
     {

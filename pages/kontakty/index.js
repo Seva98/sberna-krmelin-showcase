@@ -23,11 +23,14 @@ const Kontakty = () => {
             </div>
           </div>
           <div className="row">
-            <div className="col-6">
+            <div className="col-4">
               <ContactsCard image={hrebo} name="Ing. Lukáš Hrebík" subtitle="Jednatel" phone="+420 736 642 927" email="hrebik@lhstore.cz" />
             </div>
-            <div className="col-6">
+            <div className="col-4">
               <ContactsCard image={marek} name="Marek Elšík" subtitle="Nákupčí" phone="+420 XXX XXX XXX" email="elsik@lhstore.cz" />
+            </div>
+            <div className="col-4">
+              <ContactsCard image={marek} name="Jiří Sýkora" subtitle="Likvidace autovraků" phone="+420 606 577 677" email="autovraky@centrum.cz" />
             </div>
           </div>
         </div>

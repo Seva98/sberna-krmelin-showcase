@@ -10,7 +10,7 @@ import UpIcon from '../icons/upIcon';
 const EditableMaterialTableRow = ({ material, loading, onDoubleDown, onDown, onUp, onDoubleUp, onTextChange, onTextChanged, onDelete, onFavorite }) => {
   return (
     <tr>
-      <td>
+      <td style={{ minWidth: '175px' }}>
         <DoubleDownIcon onClick={onDoubleDown} />
         <DownIcon onClick={onDown} className="mx-2" />
         <UpIcon onClick={onUp} className="mx-2" />
@@ -59,6 +59,17 @@ const EditableMaterialTableRow = ({ material, loading, onDoubleDown, onDown, onU
           disabled={loading}
           onChange={(e) => onTextChange(e.target.value, material._id, 'unit')}
           onBlur={(e) => onTextChanged(e.target.value, material._id, 'unit')}
+        />
+      </td>
+      <td>
+        <input
+          type="text"
+          placeholder="URL obrázku"
+          value={material.img}
+          className="mx-2"
+          disabled={loading}
+          onChange={(e) => onTextChange(e.target.value, material._id, 'img')}
+          onBlur={(e) => onTextChanged(e.target.value, material._id, 'img')}
         />
       </td>
       <td>

@@ -1,6 +1,10 @@
 import { useState } from 'react';
+import Image from 'next/image';
+import img from '../../assets/images/review-1.png';
 
 const MaterialsTable = ({ categories, materials, activeMainCategory }) => {
+  const [activeMaterial, setActiveMaterial] = useState('');
+
   const getChange = ({ prices }) => {
     if (prices.length <= 1) return;
 
@@ -33,8 +37,15 @@ const MaterialsTable = ({ categories, materials, activeMainCategory }) => {
                       .filter(({ category }) => category === catId)
                       .sort((a, b) => a.order - b.order)
                       .map((material) => (
-                        <tr key={material.name}>
-                          <th>{material.name}</th>
+                        <tr key={material.name} onClick={() => setActiveMaterial(activeMaterial === material.name ? '' : material.name)}>
+                          <th>
+                            <div style={{ height: `${activeMaterial === material.name ? '196px' : '32px'}`, display: 'flex', alignItems: 'center' }}>
+                              {material.img && (
+                                <Image src={material.img} width={activeMaterial === material.name ? '196' : '32'} height={activeMaterial === material.name ? '196' : '32'} alt={material.name} />
+                              )}
+                              <div className="ms-3">{material.name}</div>
+                            </div>
+                          </th>
                           <td>{material.description}</td>
                           <td>{`${material.prices[material.prices.length - 1].price} ${material.unit}`}</td>
                           <td className={getChange(material) > 0 ? 'text-success' : 'text-danger'}>{getChange(material) ? `${getChange(material)}%` : ''}</td>

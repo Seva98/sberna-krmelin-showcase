@@ -7,6 +7,7 @@ const NewMaterial = ({ materials, category, onSave, onCancel }) => {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [unit, setUnit] = useState('Kč/kg');
+  const [img, setImg] = useState('');
 
   const handlePriceChange = (e) => {
     const { value } = e.target;
@@ -21,6 +22,7 @@ const NewMaterial = ({ materials, category, onSave, onCancel }) => {
         description,
         category,
         unit,
+        img,
         prices: [
           {
             timestamp: new Date(),
@@ -49,6 +51,9 @@ const NewMaterial = ({ materials, category, onSave, onCancel }) => {
       </td>
       <td>
         <input name="unit" placeholder="Jednotka" value={unit} className="w-100 form-control" onChange={({ target: { value } }) => setUnit(value)} />
+      </td>
+      <td>
+        <input name="img" placeholder="Obrázek" value={img} className="w-100 form-control" onChange={({ target: { value } }) => setImg(value)} />
       </td>
       <td>
         <button className="btn btn-primary w-100" onClick={() => saveNewMaterial()} disabled={!name || !description || !price}>
