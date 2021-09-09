@@ -14,9 +14,9 @@ const Review = ({ name, location, title, text, image }) => {
       </div>
       <div className="mb-3">{text}</div>
       <div className="row">
-        <div className="col-auto">
+        {/* <div className="col-auto">
           <Image className="source-profile rounded-circle mr-3" src={image} alt="" height="96" width="96" />
-        </div>
+        </div> */}
         <div className="col">
           <div className="source-info media-body pt-4">
             <div>{name}</div>

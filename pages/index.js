@@ -17,7 +17,7 @@ export default function Home({ materials, deviceType }) {
     <Layout>
       <section>
         <div className="container">
-          <Banner src={bannerTop} />
+          {/* <Banner src={bannerTop} /> */}
           <InfoTop materials={materials} />
         </div>
       </section>
