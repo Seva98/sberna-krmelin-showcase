@@ -69,7 +69,7 @@ const MaterialsTable = ({ categories, materials, activeMainCategory }) => {
           </div>
           <div className="row" style={{ height: '100%', alignContent: 'center' }}>
             <div className="col-12 text-center">
-              <Image src={activeMaterial.img} width={modalSize} height={modalSize} alt={activeMaterial.name} />
+              <Image src={activeMaterial.img} width={modalSize} height={modalSize} alt={activeMaterial.name} objectFit="contain" />
             </div>
             <div className="col-12 text-center lead" style={{ color: 'white', fontWeight: '600' }}>
               <div>{activeMaterial.name}</div>
