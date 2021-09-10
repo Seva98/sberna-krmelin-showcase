@@ -68,20 +68,16 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
     setLoading(false);
   };
 
-  const handleCategoryTextChange = async (e) => {
-    const { value, name } = e.target;
-    const newCategories = [...categoriesCopy].map((c) => {
-      if (c._id === name) c.name = value;
-      return c;
-    });
-    setCategoriesCopy(newCategories);
-  };
-
   const handleCategoryTextChanged = async (e) => {
     const { value, name } = e.target;
     setLoading(true);
     try {
       await axios.put('/api/categories', { data: [{ _id: name, name: value }], type: 'NAME' });
+      const newCategories = [...categoriesCopy].map((c) => {
+        if (c._id === name) c.name = value;
+        return c;
+      });
+      setCategoriesCopy(newCategories);
     } catch (error) {
       console.log(error);
     }
@@ -222,6 +218,18 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
     setLoading(true);
     try {
       await axios.put('/api/materials', { data: [{ _id, value, timestamp }], type });
+      const newMaterials = [...materialsCopy].map((m) => {
+        if (m._id === _id) {
+          if (type === 'price') {
+            if (isNaN(value)) return m;
+            m.prices[m.prices.length - 1].price = value;
+          } else {
+            m[type] = value;
+          }
+        }
+        return m;
+      });
+      setMaterialsCopy(newMaterials);
     } catch (error) {
       console.log(error);
     }
@@ -268,7 +276,6 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
               onDown={() => handleNewCategoryOrder(catOrder, 'down')}
               onUp={() => handleNewCategoryOrder(catOrder, 'up')}
               onDoubleUp={() => handleNewCategoryOrder(catOrder, 'up', true)}
-              onTextChange={handleCategoryTextChange}
               onTextChanged={handleCategoryTextChanged}
               onDelete={() => handleCategoryDelete(catName, catId)}
             />
