@@ -7,12 +7,12 @@ import CheckIcon from '../../components/icons/checkIcon';
 import { getSession } from 'next-auth/client';
 
 const Admin = ({ email, categories, materials }) => {
-  // useEffect(() => {
-  //   if (!email) window.location = '/api/auth/signin';
-  // }, []);
+  useEffect(() => {
+    if (!email) window.location = '/api/auth/signin';
+  }, []);
 
   const [editMode, setEditMode] = useState(false);
-  // if (!email) return <></>;
+  if (!email) return <></>;
   return (
     <Layout className="container">
       <h1>
@@ -27,15 +27,15 @@ const Admin = ({ email, categories, materials }) => {
 export default Admin;
 
 export async function getServerSideProps(context) {
-  // const { query } = context;
-  // const session = await getSession(context);
-  //  if (!session) return { props: {} };
-  // const {
-  //   user: { email },
-  // } = session;
-  // const { role } = query;
-  // const { ADMIN_USER } = process.env;
-  //  if (ADMIN_USER !== email) return { props: {} };
+  const { query } = context;
+  const session = await getSession(context);
+  if (!session) return { props: {} };
+  const {
+    user: { email },
+  } = session;
+  const { role } = query;
+  const { ADMIN_USER } = process.env;
+  if (ADMIN_USER !== email) return { props: {} };
 
   const { db } = await connectToDatabase();
   const catCollection = await db.collection('categories');
@@ -47,7 +47,7 @@ export async function getServerSideProps(context) {
     props: {
       categories: JSON.parse(JSON.stringify(categories)),
       materials: JSON.parse(JSON.stringify(materials)),
-      // email,
+      email,
     },
   };
 }
