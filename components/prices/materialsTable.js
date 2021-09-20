@@ -8,7 +8,6 @@ const MaterialsTable = ({ categories, materials, activeMainCategory }) => {
 
   const getChange = ({ prices }) => {
     if (prices.length <= 1) return;
-
     const prevPrice = Number(prices[prices.length - 2].price);
     const newPrice = Number(prices[prices.length - 1].price);
     return ((100 * (newPrice - prevPrice)) / prevPrice).toFixed(2);
