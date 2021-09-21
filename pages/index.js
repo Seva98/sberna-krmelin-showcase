@@ -17,7 +17,7 @@ export default function Home({ materials, deviceType }) {
     <Layout>
       <section>
         <div className="container">
-          <div className="h3 text-danger">Silnice z Ostravy na Mošnov se opravuje. V době od 22.9 - 23.9 bude z obou směru neprujezdná a nepůjde se dostat do Sběrny Krmelín.</div>
+          {/* <div className="h3 text-danger">Silnice z Ostravy na Mošnov se opravuje. V době od 22.9 - 23.9 bude z obou směru neprujezdná a nepůjde se dostat do Sběrny Krmelín.</div> */}
           {/* <Banner src={bannerTop} /> */}
           <InfoTop materials={materials} />
         </div>
