@@ -3,24 +3,25 @@ import { isNotAdmin } from '../../../lib/helpers';
 import { connectToDatabase } from '../../../lib/mongodb';
 
 export default async function handler(req, res) {
+  const { method } = req;
+  if (method === 'GET') {
+    try {
+      const response = await categories.find({}).toArray();
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(400).json(error);
+    }
+    return;
+  }
+
   if (await isNotAdmin(req)) {
     res.status(401).json({ error: 'Unauthorized access' });
     return;
   }
-  const { method } = req;
   const { db } = await connectToDatabase();
   const categories = await db.collection('categories');
 
   switch (method) {
-    case 'GET':
-      try {
-        const response = await categories.find({}).toArray();
-        res.status(200).json(response);
-      } catch (error) {
-        res.status(400).json(error);
-      }
-      break;
-
     case 'POST':
       try {
         const { name, order } = req.body;
