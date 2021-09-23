@@ -11,12 +11,19 @@ import { useSession } from 'next-auth/client';
 import bcrypt from 'bcryptjs';
 import News from '../components/homepage/news';
 import CarWreck from '../components/homepage/carWreck';
+import Image from 'next/image';
 
 export default function Home({ materials, news, deviceType }) {
   const [session, loading] = useSession();
 
   return (
     <Layout>
+      <section>
+        <div className="my-5 mx-auto shadow" style={{ maxWidth: '999px' }}>
+          <Image src="/assets/images/vraky.svg" layout="responsive" objectFit="" width={999} height={218} alt="vraky" />
+          {/* <CarWreck /> */}
+        </div>
+      </section>
       <section>
         <div className="container">
           {/* <div className="h3 text-danger">Silnice z Ostravy na Mošnov se opravuje. V době od 22.9 - 23.9 bude z obou směru neprujezdná a nepůjde se dostat do Sběrny Krmelín.</div> */}
@@ -31,11 +38,7 @@ export default function Home({ materials, news, deviceType }) {
           </div>
         </section>
       )}
-      <section>
-        <div className="my-5">
-          <CarWreck />
-        </div>
-      </section>
+
       <section>
         <div className="theme-bg-secondary py-5">
           <Rema />

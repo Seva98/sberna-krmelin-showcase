@@ -3,7 +3,7 @@ import ShortInfo from '../common/shortInfo';
 
 const OpeningHours = () => {
   return (
-    <ShortInfo icon={<ClockIcon className="mb-4" title="Otevírací doba" />}>
+    <ShortInfo icon={<ClockIcon className="mb-4" />} title="Otevírací doba">
       <table className="table">
         <tbody>
           <tr>
