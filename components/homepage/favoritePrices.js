@@ -20,7 +20,7 @@ const FavoritePrices = ({ materials }) => {
             ))}
         </tbody>
       </table>
-      <button className="btn theme-btn-ghost w-100" onClick={() => router.push('/cenik')}>
+      <button className="btn theme-btn-ghost w-100 mb-2" onClick={() => router.push('/cenik')}>
         Kompletní ceník
       </button>
     </ShortInfo>
