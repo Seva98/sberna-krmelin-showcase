@@ -6,6 +6,8 @@ export default async function handler(req, res) {
   const { method } = req;
   if (method === 'GET') {
     try {
+      const { db } = await connectToDatabase();
+      const categories = await db.collection('categories');
       const response = await categories.find({}).toArray();
       res.status(200).json(response);
     } catch (error) {

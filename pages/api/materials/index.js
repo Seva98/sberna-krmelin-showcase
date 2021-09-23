@@ -6,6 +6,8 @@ export default async function handler(req, res) {
   const { method } = req;
   if (method === 'GET') {
     try {
+      const { db } = await connectToDatabase();
+      const materials = await db.collection('materials');
       const response = await materials.find({}).toArray();
       res.status(200).json(response);
     } catch (error) {
@@ -18,6 +20,7 @@ export default async function handler(req, res) {
     res.status(401).json({ error: 'Unauthorized access' });
     return;
   }
+
   const { db } = await connectToDatabase();
   const materials = await db.collection('materials');
 
