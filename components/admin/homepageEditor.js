@@ -34,7 +34,7 @@ const HomepageEditor = ({ news }) => {
   const handleDelete = async ({ _id }) => {
     if (loading) return;
     setLoading(true);
-    if (confirm(`Hrebo? Opravdu chceš smazat novinku?`)) {
+    if (confirm(`Opravdu chceš smazat novinku?`)) {
     }
     try {
       await axios.delete(`/api/news`, { data: { _id } });

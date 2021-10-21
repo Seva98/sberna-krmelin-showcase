@@ -87,7 +87,7 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
   const handleCategoryDelete = async (catName, catId) => {
     if (loading) return;
     setLoading(true);
-    if (confirm(`Hrebo? Opravdu chceš smazat kategorii ${catName}?`)) {
+    if (confirm(`Opravdu chceš smazat kategorii ${catName}?`)) {
       try {
         await axios.delete(`/api/categories`, { data: { _id: catId } });
         const filteredArr = [...categoriesCopy].filter((c) => c._id !== catId);
@@ -239,7 +239,7 @@ const EditableMaterialsTable = ({ categories, materials, editMode }) => {
   const handleMaterialDelete = async (name, _id, category) => {
     if (loading) return;
     setLoading(true);
-    if (confirm(`Hrebo? Opravdu chceš smazat materiál ${name}?`)) {
+    if (confirm(`Opravdu chceš smazat materiál ${name}?`)) {
       try {
         await axios.delete(`/api/materials`, { data: { _id } });
         const filteredArr = [...materialsCopy].filter((m) => m._id !== _id && m.category === category);
